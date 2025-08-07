@@ -18,6 +18,7 @@ import qualified Data.List
 import qualified Data.Maybe
 import qualified Data.Text
 import qualified Data.Text.Encoding
+import qualified Data.Eq
 import qualified Io.Superposition.Model.DimensionExt
 import qualified Io.Superposition.Model.InternalServerError
 import qualified Io.Superposition.Model.ListDimensionsInput
@@ -28,11 +29,19 @@ import qualified Network.HTTP.Client
 import qualified Network.HTTP.Types.Header
 import qualified Network.HTTP.Types.Method
 import qualified Network.HTTP.Types.URI
+import qualified GHC.Generics
+import qualified GHC.Show
+
 
 data ListDimensionsError =
     InternalServerError Io.Superposition.Model.InternalServerError.InternalServerError
     | BuilderError Data.Text.Text
     | RequestError Data.Text.Text
+deriving (
+  GHC.Show.Show,
+  Data.Eq.Eq,
+  GHC.Generics.Generic
+  )
 
 
 serListDimensionsQUERY :: Io.Superposition.Model.ListDimensionsInput.ListDimensionsInput -> Data.ByteString.ByteString
