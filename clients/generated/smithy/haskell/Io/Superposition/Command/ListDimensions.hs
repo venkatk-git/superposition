@@ -36,8 +36,11 @@ data ListDimensionsError =
     InternalServerError Io.Superposition.Model.InternalServerError.InternalServerError
     | BuilderError Data.Text.Text
     | RequestError Data.Text.Text
-deriving ( Show, Eq, Generic )
 
+instance Show ListDimensionsError where
+  show (InternalServerError err) = "InternalServerError: " ++ show err
+  show (BuilderError msg)        = "BuilderError: " ++ T.unpack msg
+  show (RequestError msg)        = "RequestError: " ++ T.unpack msg
 
 serListDimensionsQUERY :: Io.Superposition.Model.ListDimensionsInput.ListDimensionsInput -> Data.ByteString.ByteString
 serListDimensionsQUERY input =
