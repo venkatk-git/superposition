@@ -37,11 +37,7 @@ data ListDimensionsError =
     InternalServerError Io.Superposition.Model.InternalServerError.InternalServerError
     | BuilderError Data.Text.Text
     | RequestError Data.Text.Text
-deriving (
-  GHC.Show.Show,
-  Data.Eq.Eq,
-  GHC.Generics.Generic
-  )
+deriving ( Show, Eq, Generic )
 
 
 serListDimensionsQUERY :: Io.Superposition.Model.ListDimensionsInput.ListDimensionsInput -> Data.ByteString.ByteString
