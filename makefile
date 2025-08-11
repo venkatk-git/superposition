@@ -88,7 +88,7 @@ else
 	@echo "Skipping localstack container-setup in CI."
 endif
 	@echo "Verifying localstack readiness..."
-	@while ! aws --no-cli-pager --endpoint-url=http://$(DOCKER_DNS):4566 --region=ap-south-1 sts get-caller-identity; do \
+	@while ! aws --output json --no-cli-pager --endpoint-url=http://$(DOCKER_DNS):4566 --region=ap-south-1 sts get-caller-identity; do \
 		sleep 0.5; \
 	done
 
