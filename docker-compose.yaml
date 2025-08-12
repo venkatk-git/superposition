@@ -3,7 +3,7 @@ services:
     build: ./docker-compose/postgres/
     container_name: superposition_postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_PASSWORD: "docker"
       POSTGRES_DB: "config"
