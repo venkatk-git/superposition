@@ -32,6 +32,7 @@ import qualified Network.HTTP.Client
 import qualified Network.HTTP.Types.Header
 import qualified Network.HTTP.Types.Method
 import qualified Network.HTTP.Types.URI
+import Prelude
 
 data UpdateOverrideError =
     ResourceNotFound Io.Superposition.Model.ResourceNotFound.ResourceNotFound
@@ -96,7 +97,9 @@ updateOverride client inputB = do
         (Data.Either.Left err, _) -> return $ Data.Either.Left (BuilderError err)
         (_, Data.Either.Left err) -> return $ Data.Either.Left (RequestError $ Data.Text.pack $ show err)
         (Data.Either.Right input, Data.Either.Right req) -> do
-            response <- Network.HTTP.Client.httpLbs (toRequest input req) httpManager
+            let request = toRequest input req
+            putStrLn $ "Request: " ++ show request
+            response <- Network.HTTP.Client.httpLbs request httpManager
             return $ Data.Bifunctor.first (RequestError) $ deserializeResponse response
         
     
@@ -220,6 +223,3 @@ deserializeResponse response = do
         findHeader name = snd Data.Functor.<$> Data.List.find ((name ==) . fst) headers
         parseHeaderList :: Data.Aeson.FromJSON a => (Data.ByteString.ByteString -> Data.Either.Either Data.Text.Text a) -> Data.ByteString.ByteString -> Data.Either.Either Data.Text.Text [a]
         parseHeaderList parser = sequence . Data.List.map (parser) . Data.ByteString.Char8.split ','
-    
-
-
