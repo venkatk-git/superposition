@@ -9,6 +9,7 @@ import qualified Data.ByteString
 import qualified Data.ByteString.Builder
 import qualified Data.ByteString.Char8
 import qualified Data.ByteString.Lazy
+import qualified Data.ByteString.Lazy.Char8 as LBS
 import qualified Data.CaseInsensitive
 import qualified Data.Either
 import qualified Data.Function
@@ -135,6 +136,11 @@ getResolvedConfig client inputB = do
         (Data.Either.Right input, Data.Either.Right req) -> do
             let request = toRequest input req
             putStrLn $ "Request: " ++ show request
+            let requestBody = serGetResolvedConfigPAYLOAD input
+            case requestBody of
+                Network.HTTP.Client.RequestBodyLBS lbs -> putStrLn $ "RequestBody: " ++ LBS.unpack lbs
+                _ -> putStrLn "RequestBody: (not LBS)"
+            
             response <- Network.HTTP.Client.httpLbs request httpManager
             return $ Data.Bifunctor.first (RequestError) $ deserializeResponse response
         
