@@ -111,7 +111,7 @@ updateOverride client inputB = do
                 Network.HTTP.Client.path = serUpdateOverrideLABEL input
                 , Network.HTTP.Client.method = method
                 , Network.HTTP.Client.requestBody = serUpdateOverridePAYLOAD input
-                , Network.HTTP.Client.requestHeaders = (serUpdateOverrideHEADER input) ++ [("Authorization", "Bearer " <> token)]
+                , Network.HTTP.Client.requestHeaders = (serUpdateOverrideHEADER input) ++ [("Authorization", "Bearer " <> token), ("Content-Type", "application/json")]
             }
         
     
