@@ -30,7 +30,7 @@ import qualified Network.HTTP.Client
 import qualified Network.HTTP.Types.Header
 import qualified Network.HTTP.Types.Method
 import qualified Network.HTTP.Types.URI
-import Prelude
+import Prelude hiding (read)
 
 data GetResolvedConfigError =
     InternalServerError Io.Superposition.Model.InternalServerError.InternalServerError
