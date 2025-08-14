@@ -154,7 +154,7 @@ getResolvedConfig client inputB = do
                 , Network.HTTP.Client.method = method
                 , Network.HTTP.Client.queryString = serGetResolvedConfigQUERY input
                 , Network.HTTP.Client.requestBody = serGetResolvedConfigPAYLOAD input
-                , Network.HTTP.Client.requestHeaders = (serGetResolvedConfigHEADER input) ++ [("Authorization", "Bearer " <> token)]
+                , Network.HTTP.Client.requestHeaders = (serGetResolvedConfigHEADER input) ++ [("Authorization", "Bearer " <> token), ("Content-Type", "application/json")]
             }
         
     

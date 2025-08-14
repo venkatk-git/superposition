@@ -851,6 +851,8 @@ async fn get_resolved_config(
     }
 
     let is_smithy: bool;
+    log::info!("Request method: {}", req.method());
+    log::info!("Request body: {:?}", body);
     let context = if req.method() == actix_web::http::Method::GET {
         is_smithy = false;
         query_params_map
