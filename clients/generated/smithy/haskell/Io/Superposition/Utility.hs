@@ -82,7 +82,7 @@ instance ResponseSegment HTTPDate where
 instance RequestSegment UTCTime where
     toRequestSegment = pack . show
 instance ResponseSegment UTCTime where
-    fromResponseSegment = mapLeft pack . readEither . Char8.unpack
+    fromResponseSegment = maybe (Left "Failed to parse UTCTime from HTTPDate") Right . parseHTTPDate
 
 instance RequestSegment POSIXTime where
     toRequestSegment = pack . show
@@ -91,5 +91,3 @@ instance ResponseSegment POSIXTime where
 
 mapLeft :: (a -> b) -> Either a c -> Either b c
 mapLeft f = either (Left . f) Right
-
-
