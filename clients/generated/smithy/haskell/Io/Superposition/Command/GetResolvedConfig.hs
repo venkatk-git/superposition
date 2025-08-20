@@ -142,7 +142,11 @@ getResolvedConfig client inputB = do
                 _ -> putStrLn "RequestBody: (not LBS)"
             
             response <- Network.HTTP.Client.httpLbs request httpManager
-            return $ Data.Bifunctor.first (RequestError) $ deserializeResponse response
+            let result = deserializeResponse response
+            case result of
+                Left err -> putStrLn $ "Error deserializing response: " ++ Data.Text.unpack err
+                _ -> return ()
+            return $ Data.Bifunctor.first (RequestError) result
         
     
     where
