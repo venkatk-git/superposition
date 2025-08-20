@@ -30,7 +30,7 @@ import qualified Network.HTTP.Client
 import qualified Network.HTTP.Types.Header
 import qualified Network.HTTP.Types.Method
 import qualified Network.HTTP.Types.URI
-import Prelude hiding (read)
+import Prelude 
 
 data GetResolvedConfigError =
     InternalServerError Io.Superposition.Model.InternalServerError.InternalServerError
@@ -177,16 +177,17 @@ deserializeResponse response = do
                 Data.Function.& sequence
         
     
-    configPayloadE :: Data.Maybe.Maybe Data.Aeson.Value <- do
-        Data.Aeson.decode (Network.HTTP.Client.responseBody response)
-                Data.Function.& Data.Either.Right
-        
-    
-    Io.Superposition.Model.GetResolvedConfigOutput.build $ do
-        Io.Superposition.Model.GetResolvedConfigOutput.setAuditId audit_idHeaderE
-        Io.Superposition.Model.GetResolvedConfigOutput.setVersion versionHeaderE
-        Io.Superposition.Model.GetResolvedConfigOutput.setLastModified last_modifiedHeaderE
-        Io.Superposition.Model.GetResolvedConfigOutput.setConfig configPayloadE
+    let body = Network.HTTP.Client.responseBody response
+    case Data.Aeson.decode body of
+        Nothing -> if LBS.null body 
+                   then Left "Response body is empty"
+                   else Left $ "Failed to decode JSON from response body: " <> (Data.Text.pack $ LBS.unpack body)
+        Just payload -> 
+            Io.Superposition.Model.GetResolvedConfigOutput.build $ do
+                Io.Superposition.Model.GetResolvedConfigOutput.setAuditId audit_idHeaderE
+                Io.Superposition.Model.GetResolvedConfigOutput.setVersion versionHeaderE
+                Io.Superposition.Model.GetResolvedConfigOutput.setLastModified last_modifiedHeaderE
+                Io.Superposition.Model.GetResolvedConfigOutput.setConfig (Just payload)
     
     where
         headers = Network.HTTP.Client.responseHeaders response
