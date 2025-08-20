@@ -15,7 +15,7 @@ import Data.Time.Clock.POSIX (POSIXTime)
 import Data.Text.Encoding (encodeUtf8, decodeUtf8, decodeUtf8')
 import Data.ByteString (ByteString)
 import Data.ByteString.Char8 as Char8 (unpack)
-import Network.HTTP.Date (HTTPDate, formatHTTPDate, parseHTTPDate)
+import Network.HTTP.Date (HTTPDate, formatHTTPDate, parseHTTPDate, httpDateToUTC)
 import Data.Text (Text, pack, unpack, toLower)
 import Text.Read (readEither)
 import Data.Int (Int64, Int16, Int8)
@@ -82,7 +82,7 @@ instance ResponseSegment HTTPDate where
 instance RequestSegment UTCTime where
     toRequestSegment = pack . show
 instance ResponseSegment UTCTime where
-    fromResponseSegment = maybe (Left "Failed to parse UTCTime from HTTPDate") Right . parseHTTPDate
+    fromResponseSegment = maybe (Left "Failed to parse HTTPDate") Right . fmap httpDateToUTC . parseHTTPDate
 
 instance RequestSegment POSIXTime where
     toRequestSegment = pack . show
