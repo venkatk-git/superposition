@@ -71,7 +71,7 @@ env-file:
 db:
 ifndef CI
 ifeq ($(DB_UP),1)
-	$(COMPOSE) up -d postgres
+	sudo $(COMPOSE) up -d postgres
 endif
 else
 	@echo "Skipping postgres container-setup in CI."
